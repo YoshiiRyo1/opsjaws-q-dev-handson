@@ -4,11 +4,11 @@ Ops-JAWS Amazon Q Developer Handson
 
 ## 目次
 
-1. Q Dev CLI インストール、AWS CLI インストール、uv インストール
+1. Q Developer CLI インストール、AWS CLI インストール、uv インストール
 2. CDK インストール、Sample App 作成
-3. Q Dev CLI のおすすめ設定解説
-4. Q Dev CLI やってみる
-5. Q Dev マネコン やってみる
+3. Q Developer CLI のおすすめ設定解説
+4. Q Developer CLI やってみる
+5. Q Developer マネコン やってみる
 
 ## インストール
 
@@ -58,10 +58,10 @@ $ q chat
   opsjaws
 * q_cli_default
 
-# 一旦 q developerを終了
+# 一旦 Q Developer を終了
 > /quit
 
-# 再度 q developerを起動、opsjawsエージェントを指定
+# 再度 Q Developer を起動、opsjawsエージェントを指定
 $ q chat --agent opsjaws
 
 [opsjaws] > /agent list
@@ -92,7 +92,7 @@ $env:Path = "C:\Users\<UserName>\.local\bin;$env:Path"
 
 
 ```bash
-# 一旦 q developerを終了
+# 一旦 Q Developer を終了
 > /quit
 
 $ q chat --agent opsjaws
