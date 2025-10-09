@@ -2,6 +2,14 @@
 Ops-JAWS Amazon Q Developer Handson
 
 
+## 目次
+
+1. Q Dev CLI インストール、AWS CLI インストール、uv インストール
+2. CDK インストール、Sample App 作成
+3. Q Dev CLI のおすすめ設定解説
+4. Q Dev CLI やってみる
+5. Q Dev マネコン やってみる
+
 ## インストール
 
 https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line-installing.html
