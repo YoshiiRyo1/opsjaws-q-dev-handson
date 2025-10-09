@@ -1,0 +1,52 @@
+{
+	"$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
+	"name": "opsjaws",
+	"description": "",
+	"prompt": null,
+	"mcpServers": {
+		"awslabs.core-mcp-server": {
+			"command": "uvx",
+			"args": [
+				"awslabs.core-mcp-server@latest"
+			],
+			"env": {
+				"FASTMCP_LOG_LEVEL": "ERROR",
+				"AWS_PROFILE": "opsjaws-handson",
+				"AWS_REGION": "ap-northeast-1",
+				"aws-foundation": "true",
+				"solutions-architect": "true",
+				"security-identity": "true",
+				"monitoring-observability": "true"
+			},
+			"autoApprove": [],
+			"disabled": false
+		}
+	},
+	"tools": [
+		"*"
+	],
+	"toolAliases": {},
+	"allowedTools": [],
+	"resources": [
+		"file://AmazonQ.md",
+		"file://README.md",
+		"file://.amazonq/rules/**/*.md"
+	],
+	"hooks": {},
+	"toolsSettings": {
+		"execute_bash": {
+			"allowedCommands": [],
+			"deniedCommands": [
+				"git commit .*",
+				"git push .*",
+				"rm -rf .*",
+				"sudo .*",
+				"shutdown .*",
+				"reboot .*"
+			],
+			"allowReadOnly": true
+		}
+	},
+	"useLegacyMcpJson": true,
+	"model": null
+}
