@@ -21,72 +21,131 @@ Systems architecture / Systems Operations specialist, AWS specialty
 
 Use `awslabs.core-mcp-server` in every situation.  
 
-### Optimized Commands
-
-- `/analyze` - System-wide architectural analysis with dependency mapping
-- `/improve --arch` - Structural improvements and design patterns
-
 # Resources
-
-※リソース名はサンプルです。ハンズオン環境に合わせて修正が必要です。
 
 Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
 
-Resources are generally managed if they have the resource tag `env_name`:`prod-opsjaws`.  
-The main resources are listed below.  
-
-## ECS Cluster
-
-- `prod-opsjaws-cluster`: ECS cluster for LLM Gateway service
-  
-## ECS Services
-
-- `apps`: LLM Gateway service for apps model
-- `opsjaws-otel-collector`: OpenTelemetry Collector that collects and exports telemetry data of LLM Gateway service
-
-## ElastiCache
-
-- `prod-opsjaws-serverless-cache`: Serverless Redis cache for LLM Gateway service
-
-## Aurora PostgreSQL
-
-- `prod-opsjaws-postgresqlv2`: PostgreSQL database for LLM Gateway service
-
-## Application Load Balancer
-
-- `prod-opsjaws-cluster`: Application Load Balancer for LLM Gateway service
-- `apps`: Target Group for LLM Gateway service
-
-## Security & Access Control
-
-- `prod-opsjaws-web-acl`: WAF Web ACL for security protection
-- `opsjaws.local`: ACM SSL certificate
-- Multiple Security Groups: Network access control for services
-
-## Authentication
-
-- `ap-northeast-1_EhpuTpbw0`: Cognito User Pool for user authentication
-
-## Storage & Configuration
-
-- `config-123456789012-ap-northeast-1`: S3 bucket for configuration files
-- `opsjaws-otel-collector`: ECR repository for OpenTelemetry Collector images
-
-## Service Discovery
-
-- Cloud Map Namespace: Service discovery for microservices
-- Service Discovery Services: `apps` and `opsjaws-otel-collector`
-
-## Secrets Management
-
-- `opsjaws-apps-key`: apps master and salt keys
-- `opsjaws-postgresql-password`: PostgreSQL database credentials
-- `opsjaws-redis-password`: Redis authentication credentials
-- `opsjaws-openai-api-key`: OpenAI API key
-- `opsjaws-gc-peg-stg` / `opsjaws-gc-peg-prod`: Google Cloud credentials
-- `opsjaws-slack-webhook-url`: Slack notification webhook
-
-## Monitoring & Analytics
-
-- `opsjaws`: Athena workgroup for log analysis
-- Application Auto Scaling: ECS service auto scaling configuration
+| LogicalResourceId                                                                         | PhysicalResourceId                                                                                                   | ResourceType                                |
+| ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| ApplicationSignalsBuild3F1B3321                                                           | application-signals-build                                                                                            | AWS::CodeBuild::Project                     |
+| CDKMetadata                                                                               | 5a840c80-a660-11f0-9b71-0a512da58efd                                                                                 | AWS::CDK::Metadata                          |
+| CodeBuildLogGroup5F54D1DE                                                                 | /aws/codebuild/application-signals-build                                                                             | AWS::Logs::LogGroup                         |
+| CodeBuildRole728CBADE                                                                     | ApplicationSignalsCodeBuildSt-CodeBuildRole728CBADE-khaumho3svXt                                                     | AWS::IAM::Role                              |
+| CodeBuildRoleDefaultPolicy829527DE                                                        | Appli-CodeB-bX2h9sNKguRO                                                                                             | AWS::IAM::Policy                            |
+| CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536                         | ApplicationSignalsCodeBui-CustomCDKBucketDeploymen-0Dzye4QFSffY                                                      | AWS::Lambda::Function                       |
+| CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265              | ApplicationSignalsCodeBui-CustomCDKBucketDeployment-ZxvnVd34qlza                                                     | AWS::IAM::Role                              |
+| CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF | Appli-Custo-OBQW4anYCywf                                                                                             | AWS::IAM::Policy                            |
+| CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F                            | ApplicationSignalsCodeBui-CustomS3AutoDeleteObject-tFtcv1N5OBWC                                                      | AWS::Lambda::Function                       |
+| CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092                               | ApplicationSignalsCodeBui-CustomS3AutoDeleteObjects-3LgAolIXBwa3                                                     | AWS::IAM::Role                              |
+| SourceBucketAutoDeleteObjectsCustomResourceC68FC040                                       | fe1b7ad8-01cb-4bba-b0f1-c24d9d992fd2                                                                                 | Custom::S3AutoDeleteObjects                 |
+| SourceBucketDDD2130A                                                                      | application-signals-codebuild-source-992382787958-us-west-2                                                          | AWS::S3::Bucket                             |
+| SourceBucketPolicy703DFBF9                                                                | application-signals-codebuild-source-992382787958-us-west-2                                                          | AWS::S3::BucketPolicy                       |
+| SourceUploadAwsCliLayer9229458B                                                           | arn:aws:lambda:us-west-2:992382787958:layer:SourceUploadAwsCliLayer9229458B:1                                        | AWS::Lambda::LayerVersion                   |
+| SourceUploadCustomResourceF660298F                                                        | aws.cdk.s3deployment.0e9f34af-7141-401e-91b2-6fed67204f8b                                                            | Custom::CDKBucketDeployment                 |
+| CDKMetadata                                                                               | 721537b0-a66b-11f0-bc85-0a82671438eb                                                                                 | AWS::CDK::Metadata                          |
+| CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E                           | PetClinicNetworkStack-CustomVpcRestrictDefaultSGCu-VTv0lvBSxISg                                                      | AWS::Lambda::Function                       |
+| CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0                              | PetClinicNetworkStack-CustomVpcRestrictDefaultSGCus-4YKSJTpCowea                                                     | AWS::IAM::Role                              |
+| EcrApiEndpointB01DFFD7                                                                    | vpce-0fc496ba33c564915                                                                                               | AWS::EC2::VPCEndpoint                       |
+| EcrApiEndpointSecurityGroupE2E875BD                                                       | sg-0d2222264e6db2cc1                                                                                                 | AWS::EC2::SecurityGroup                     |
+| EcrDkrEndpoint2A32680E                                                                    | vpce-09ffd7d00daa58023                                                                                               | AWS::EC2::VPCEndpoint                       |
+| EcrDkrEndpointSecurityGroupE275F411                                                       | sg-0467d906b70ee7156                                                                                                 | AWS::EC2::SecurityGroup                     |
+| VPCB9E5F0B4                                                                               | vpc-0587fbb4c657f2614                                                                                                | AWS::EC2::VPC                               |
+| VPCIGWB7E252D3                                                                            | igw-0562b807fc350ff8a                                                                                                | AWS::EC2::InternetGateway                   |
+| VPCRestrictDefaultSecurityGroupCustomResource59474679                                     | 30f46072-9df7-4c9f-ada3-fbaf87dd47bb                                                                                 | Custom::VpcRestrictDefaultSG                |
+| VPCVPCGW99B986DC                                                                          | IGW                                                                                                                  | vpc-0587fbb4c657f2614                       | AWS::EC2::VPCGatewayAttachment |
+| VPCpetclinicprivatesubnetSubnet1RouteTable651D4BDB                                        | rtb-0551a21682e236c58                                                                                                | AWS::EC2::RouteTable                        |
+| VPCpetclinicprivatesubnetSubnet1RouteTableAssociation8600060D                             | rtbassoc-013d8609cd107cb5a                                                                                           | AWS::EC2::SubnetRouteTableAssociation       |
+| VPCpetclinicprivatesubnetSubnet1Subnet53D9BE1A                                            | subnet-0fd437dc69ed967bf                                                                                             | AWS::EC2::Subnet                            |
+| VPCpetclinicprivatesubnetSubnet2RouteTable06DD06DD                                        | rtb-018c37b7d116ad94c                                                                                                | AWS::EC2::RouteTable                        |
+| VPCpetclinicprivatesubnetSubnet2RouteTableAssociationB0793312                             | rtbassoc-039dc9e4d7fa063d7                                                                                           | AWS::EC2::SubnetRouteTableAssociation       |
+| VPCpetclinicprivatesubnetSubnet2SubnetFB69CED4                                            | subnet-0940881216fff797d                                                                                             | AWS::EC2::Subnet                            |
+| VPCpetclinicprivatesubnetwithegressSubnet1DefaultRoute391E32CC                            | rtb-0dfcb90c4a06eed24                                                                                                | 0.0.0.0/0                                   | AWS::EC2::Route                |
+| VPCpetclinicprivatesubnetwithegressSubnet1RouteTable53490A8F                              | rtb-0dfcb90c4a06eed24                                                                                                | AWS::EC2::RouteTable                        |
+| VPCpetclinicprivatesubnetwithegressSubnet1RouteTableAssociation9B55908D                   | rtbassoc-012f03d561999147f                                                                                           | AWS::EC2::SubnetRouteTableAssociation       |
+| VPCpetclinicprivatesubnetwithegressSubnet1SubnetDE6C84DA                                  | subnet-0c5ef788b082dd42f                                                                                             | AWS::EC2::Subnet                            |
+| VPCpetclinicprivatesubnetwithegressSubnet2DefaultRouteAF5B5779                            | rtb-0456396fa798c40ce                                                                                                | 0.0.0.0/0                                   | AWS::EC2::Route                |
+| VPCpetclinicprivatesubnetwithegressSubnet2RouteTableAssociationB1755607                   | rtbassoc-04c3e6655459934be                                                                                           | AWS::EC2::SubnetRouteTableAssociation       |
+| VPCpetclinicprivatesubnetwithegressSubnet2RouteTableE74911EE                              | rtb-0456396fa798c40ce                                                                                                | AWS::EC2::RouteTable                        |
+| VPCpetclinicprivatesubnetwithegressSubnet2Subnet46E74ECD                                  | subnet-07648e8ed686cc151                                                                                             | AWS::EC2::Subnet                            |
+| VPCpetclinicpublicsubnetSubnet1DefaultRoute43907FCF                                       | rtb-0111b9e847d67bdb5                                                                                                | 0.0.0.0/0                                   | AWS::EC2::Route                |
+| VPCpetclinicpublicsubnetSubnet1EIP92636B91                                                | 44.233.138.174                                                                                                       | AWS::EC2::EIP                               |
+| VPCpetclinicpublicsubnetSubnet1NATGatewayD2487A0F                                         | nat-0da521cf4fe055bea                                                                                                | AWS::EC2::NatGateway                        |
+| VPCpetclinicpublicsubnetSubnet1RouteTable527D162D                                         | rtb-0111b9e847d67bdb5                                                                                                | AWS::EC2::RouteTable                        |
+| VPCpetclinicpublicsubnetSubnet1RouteTableAssociationC4681D60                              | rtbassoc-0a1e1501bb76d141d                                                                                           | AWS::EC2::SubnetRouteTableAssociation       |
+| VPCpetclinicpublicsubnetSubnet1Subnet9674466F                                             | subnet-0af45ec19ab9872c0                                                                                             | AWS::EC2::Subnet                            |
+| VPCpetclinicpublicsubnetSubnet2DefaultRoute5495CBD9                                       | rtb-0e2dda90a9c3833e8                                                                                                | 0.0.0.0/0                                   | AWS::EC2::Route                |
+| VPCpetclinicpublicsubnetSubnet2EIP26E5B816                                                | 34.216.232.103                                                                                                       | AWS::EC2::EIP                               |
+| VPCpetclinicpublicsubnetSubnet2NATGateway46695720                                         | nat-0f7d4b9f39ba3d93d                                                                                                | AWS::EC2::NatGateway                        |
+| VPCpetclinicpublicsubnetSubnet2RouteTable22D550B9                                         | rtb-0e2dda90a9c3833e8                                                                                                | AWS::EC2::RouteTable                        |
+| VPCpetclinicpublicsubnetSubnet2RouteTableAssociationF2292F60                              | rtbassoc-0dc0a4d4fce7475a1                                                                                           | AWS::EC2::SubnetRouteTableAssociation       |
+| VPCpetclinicpublicsubnetSubnet2Subnet04760C36                                             | subnet-041125a11b6c7129c                                                                                             | AWS::EC2::Subnet                            |
+| albsecuritygroup4B3C20F7                                                                  | sg-02881fa5c927ba24c                                                                                                 | AWS::EC2::SecurityGroup                     |
+| ecssecuritygroupE15CB9D2                                                                  | sg-0f99f618fc4b7d66c                                                                                                 | AWS::EC2::SecurityGroup                     |
+| ecssecuritygroupfromPetClinicNetworkStackalbsecuritygroup67EB37E58080392AB9E3             | sgr-0fa0baebf666abcc8                                                                                                | AWS::EC2::SecurityGroupIngress              |
+| ecssecuritygroupfromPetClinicNetworkStackecssecuritygroupDD3C54EBALLTRAFFIC13CB3571       | sgr-09595cd693980d3ae                                                                                                | AWS::EC2::SecurityGroupIngress              |
+| rdssecuritygroupFB88BAE5                                                                  | sg-066e51932a002abb7                                                                                                 | AWS::EC2::SecurityGroup                     |
+| rdssecuritygroupfromPetClinicNetworkStackecssecuritygroupDD3C54EB5432037249AB             | sgr-0d777f29cc247a64a                                                                                                | AWS::EC2::SecurityGroupIngress              |
+| s3Endpoint0A26C1CA                                                                        | vpce-048affc0a4a103ca0                                                                                               | AWS::EC2::VPCEndpoint                       |
+| CDKMetadata                                                                               | d1cd2780-a66b-11f0-9a2f-0a817992ae53                                                                                 | AWS::CDK::Metadata                          |
+| petclinicadminserverloggroupBAB58E32                                                      | /ecs/pet-clinic-admin-server                                                                                         | AWS::Logs::LogGroup                         |
+| petclinicapigatewaycwagentloggroup88107A1C                                                | /ecs/pet-clinic-api-gateway-cwagent                                                                                  | AWS::Logs::LogGroup                         |
+| petclinicapigatewayloggroup851E4F19                                                       | /ecs/pet-clinic-api-gateway                                                                                          | AWS::Logs::LogGroup                         |
+| petclinicbillingservicecwagentloggroupC6069631                                            | /ecs/pet-clinic-billing-service-cwagent                                                                              | AWS::Logs::LogGroup                         |
+| petclinicbillingserviceloggroupD64B741E                                                   | /ecs/pet-clinic-billing-service                                                                                      | AWS::Logs::LogGroup                         |
+| petclinicconfigserverloggroup103CD724                                                     | /ecs/pet-clinic-config-server                                                                                        | AWS::Logs::LogGroup                         |
+| petcliniccustomersservicecwagentloggroup2D5EFDCA                                          | /ecs/pet-clinic-customers-service-cwagent                                                                            | AWS::Logs::LogGroup                         |
+| petcliniccustomersserviceloggroup9F96B19F                                                 | /ecs/pet-clinic-customers-service                                                                                    | AWS::Logs::LogGroup                         |
+| petclinicdiscoveryserverloggroup85C6CB9B                                                  | /ecs/pet-clinic-discovery-server                                                                                     | AWS::Logs::LogGroup                         |
+| petclinicinsuranceservicecwagentloggroup3D86D3C0                                          | /ecs/pet-clinic-insurance-service-cwagent                                                                            | AWS::Logs::LogGroup                         |
+| petclinicinsuranceserviceloggroup4E2DE3B7                                                 | /ecs/pet-clinic-insurance-service                                                                                    | AWS::Logs::LogGroup                         |
+| petclinicvetsservicecwagentloggroup4CF5FB85                                               | /ecs/pet-clinic-vets-service-cwagent                                                                                 | AWS::Logs::LogGroup                         |
+| petclinicvetsserviceloggroupC6B39A29                                                      | /ecs/pet-clinic-vets-service                                                                                         | AWS::Logs::LogGroup                         |
+| petclinicvisitsservicecwagentloggroupB92CC24F                                             | /ecs/pet-clinic-visits-service-cwagent                                                                               | AWS::Logs::LogGroup                         |
+| petclinicvisitsserviceloggroupA8143437                                                    | /ecs/pet-clinic-visits-service                                                                                       | AWS::Logs::LogGroup                         |
+| trafficgeneratorloggroupE431E6F1                                                          | /ecs/traffic-generator                                                                                               | AWS::Logs::LogGroup                         |
+| ApiGatewayTargetGroup5535E1F2                                                             | arn:aws:elasticloadbalancing:us-west-2:992382787958:targetgroup/api-gateway-target-group/655fcfce35c99612            | AWS::ElasticLoadBalancingV2::TargetGroup    |
+| CDKMetadata                                                                               | e533bcd0-a66b-11f0-9e0f-02ad727e70a3                                                                                 | AWS::CDK::Metadata                          |
+| LoadBalancerBE9EEC3A                                                                      | arn:aws:elasticloadbalancing:us-west-2:992382787958:loadbalancer/app/ecs-load-balancer/8b8905d7a429b7cc              | AWS::ElasticLoadBalancingV2::LoadBalancer   |
+| LoadBalancerListenerE1A099B9                                                              | arn:aws:elasticloadbalancing:us-west-2:992382787958:listener/app/ecs-load-balancer/8b8905d7a429b7cc/251654ffdc397cd1 | AWS::ElasticLoadBalancingV2::Listener       |
+| CDKMetadata                                                                               | 4be0d530-a66c-11f0-8e33-0297a09a2f2f                                                                                 | AWS::CDK::Metadata                          |
+| DBSecretAttachmentC565A14F                                                                | arn:aws:secretsmanager:us-west-2:992382787958:secret:ECSPetClinicDBCredentials-NmqhwY                                | AWS::SecretsManager::SecretTargetAttachment |
+| DBSecretD58955BC                                                                          | arn:aws:secretsmanager:us-west-2:992382787958:secret:ECSPetClinicDBCredentials-NmqhwY                                | AWS::SecretsManager::Secret                 |
+| MyDBSubnetGroup                                                                           | my-db-subnet-group                                                                                                   | AWS::RDS::DBSubnetGroup                     |
+| MyDatabase1E2517DB                                                                        | ecs-petclinic-python                                                                                                 | AWS::RDS::DBInstance                        |
+| CDKMetadata                                                                               | fdd15a80-a66c-11f0-acc5-026ad8fcb53b                                                                                 | AWS::CDK::Metadata                          |
+| Namespace9B63B8C8                                                                         | ns-ajmrxofvozdjkr2x                                                                                                  | AWS::ServiceDiscovery::PrivateDnsNamespace  |
+| petclinicadminserverDNSF9CF460B                                                           | srv-sd5al3uqrh4dx5gs                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petclinicbillingserviceDNSEA14C93F                                                        | srv-ajndtb3trbt3snr7                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petclinicconfigserverDNS551BE7A2                                                          | srv-csdyy3i3bpul5y3u                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petcliniccustomersserviceDNSB8D4EAD4                                                      | srv-2m54o7f4vnnccimu                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petclinicdiscoveryserverDNSC801BA17                                                       | srv-27n7tqx3f3zjluk7                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petclinicinsuranceserviceDNS9D12943E                                                      | srv-lduox5vbv4n2rjwk                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petclinicvetsserviceDNSCBBDC65A                                                           | srv-phbfnllubpeqhgq6                                                                                                 | AWS::ServiceDiscovery::Service              |
+| petclinicvisitsserviceDNSDB1D0AD0                                                         | srv-y6zpzrokeujphn3q                                                                                                 | AWS::ServiceDiscovery::Service              |
+| CDKMetadata                                                                               | 28a196d0-a66d-11f0-8af0-02d47b99088f                                                                                 | AWS::CDK::Metadata                          |
+| EcsTaskExecutionRoleC0B6A84D                                                              | ecs-pet-clinic-task-execution-role                                                                                   | AWS::IAM::Role                              |
+| EcsTaskExecutionRoleDefaultPolicyDCEEFDC3                                                 | IamRo-EcsTa-5Nky1s6cAG8e                                                                                             | AWS::IAM::Policy                            |
+| EcsTaskRole8DFA0181                                                                       | ecs-pet-clinic-task-role                                                                                             | AWS::IAM::Role                              |
+| EcsTaskRoleDefaultPolicy50882C77                                                          | IamRo-EcsTa-5OMAzLHYoDk4                                                                                             | AWS::IAM::Policy                            |
+|CDKMetadata|493b3b30-a66d-11f0-a518-0237a1dd910d|AWS::CDK::Metadata|
+|EcsCluster97242B84|ecs-pet-clinic-demo|AWS::ECS::Cluster|
+|petclinicadminserverecsserviceService31004D3C|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-admin-server|AWS::ECS::Service|
+|petclinicadminservertaskC5D66B8C|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-admin-server:2|AWS::ECS::TaskDefinition|
+|petclinicapigatewayecsserviceServiceA0472D99|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-api-gateway|AWS::ECS::Service|
+|petclinicapigatewaytask83051F15|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-api-gateway:2|AWS::ECS::TaskDefinition|
+|petclinicbillingserviceecsserviceService63CBDBCB|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-billing-service|AWS::ECS::Service|
+|petclinicbillingservicetaskE4E533C4|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-billing-service:2|AWS::ECS::TaskDefinition|
+|petclinicconfigserverecsserviceService6776C0B2|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-config-server|AWS::ECS::Service|
+|petclinicconfigservertaskCA4E91AE|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-config-server:2|AWS::ECS::TaskDefinition|
+|petcliniccustomersserviceecsserviceService6F72BEA7|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-customers-service|AWS::ECS::Service|
+|petcliniccustomersservicetask5FD254BE|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-customers-service:2|AWS::ECS::TaskDefinition|
+|petclinicdiscoveryserverecsserviceService2A175AF8|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-discovery-server|AWS::ECS::Service|
+|petclinicdiscoveryservertask31AC2AB8|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-discovery-server:2|AWS::ECS::TaskDefinition|
+|petclinicinsuranceserviceecsserviceService17C4DD0D|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-insurance-service|AWS::ECS::Service|
+|petclinicinsuranceservicetaskC0463623|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-insurance-service:2|AWS::ECS::TaskDefinition|
+|petclinicvetsserviceecsserviceService7D6D3F05|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-vets-service|AWS::ECS::Service|
+|petclinicvetsservicetask7866F98C|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-vets-service:2|AWS::ECS::TaskDefinition|
+|petclinicvisitsserviceecsserviceServiceC76D8128|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/pet-clinic-visits-service|AWS::ECS::Service|
+|petclinicvisitsservicetaskF1620274|arn:aws:ecs:us-west-2:992382787958:task-definition/pet-clinic-visits-service:2|AWS::ECS::TaskDefinition|
+|trafficgeneratorecsserviceService6BD519D2|arn:aws:ecs:us-west-2:992382787958:service/ecs-pet-clinic-demo/traffic-generator|AWS::ECS::Service|
+|trafficgeneratortaskCD29D1A3|arn:aws:ecs:us-west-2:992382787958:task-definition/traffic-generator:2|AWS::ECS::TaskDefinition|

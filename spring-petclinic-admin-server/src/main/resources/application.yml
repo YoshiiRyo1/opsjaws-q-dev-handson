@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: admin-server
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888/}
+
+eureka:
+  instance:
+    preferIpAddress: true
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+    import: configserver:http://config-server:8888
+
+---
+# Prod profile
+spring:
+  config:
+    activate:
+      on-profile: ecs
+
+eureka:
+  instance:
+    ipAddress: ${ADMIN_IP:admin-server}
+  client:
+    serviceUrl:
+      defaultZone: ${DISCOVERY_SERVER_URL:http://discover-server:8761/eureka/}
