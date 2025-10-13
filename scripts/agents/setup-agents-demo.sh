@@ -3,7 +3,7 @@
 set -e
 
 # Default values
-REGION="ap-northeast-1"
+REGION="us-west-2"
 OPERATION="deploy"
 
 # Parse command line arguments

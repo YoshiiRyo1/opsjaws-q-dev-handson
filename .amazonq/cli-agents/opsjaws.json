@@ -12,7 +12,7 @@
 			"env": {
 				"FASTMCP_LOG_LEVEL": "ERROR",
 				"AWS_PROFILE": "opsjaws-handson",
-				"AWS_REGION": "ap-northeast-1",
+				"AWS_REGION": "us-west-2",
 				"aws-foundation": "true",
 				"solutions-architect": "true",
 				"security-identity": "true",

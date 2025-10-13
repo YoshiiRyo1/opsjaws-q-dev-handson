@@ -2,7 +2,7 @@
 set -ex
 
 # Default values
-DEFAULT_REGION="ap-northeast-1"
+DEFAULT_REGION="us-west-2"
 OPERATION="create"
 
 # Read command line arguments

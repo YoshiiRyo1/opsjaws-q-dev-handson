@@ -15,13 +15,13 @@ spec:
     exporters:
       otlphttp:
         #traces_endpoint field follows this pattern https://xray.<region>.amazonaws.com/v1/traces
-        traces_endpoint: https://xray.us-east-1.amazonaws.com/v1/traces 
+        traces_endpoint: https://xray.us-west-2.amazonaws.com/v1/traces
         auth:
           authenticator: sigv4auth
           
     extensions:
       sigv4auth:
-        region: us-east-1
+        region: us-west-2
         service: "xray"
 
     service:

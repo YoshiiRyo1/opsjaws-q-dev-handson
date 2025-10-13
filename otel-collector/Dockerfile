@@ -2,7 +2,7 @@
 FROM --platform=linux/amd64 public.ecr.aws/docker/library/python:3.10
 
 # Define the build argument with a default value
-ARG REGION=us-east-1
+ARG REGION=us-west-2
 
 # Export the ARG to ENV to make it persist
 ENV REGION=${REGION}
