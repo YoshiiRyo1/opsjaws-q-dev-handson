@@ -32,3 +32,32 @@ spring:
 eureka:
   instance:
     ipAddress: ${VISITS_SERVICE_IP:visits-service}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: chaos-monkey
+    import: configserver:http://config-server:8888
+
+chaos:
+  monkey:
+    enabled: true
+    watcher:
+      service: true
+      controller: true
+      restController: true
+      component: true
+    assaults:
+      latencyActive: false
+      exceptionsActive: true
+      level: 5
+
+management:
+  endpoint:
+    chaosmonkey:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
