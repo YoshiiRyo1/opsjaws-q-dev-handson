@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: visits-service
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888/}
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8761/eureka}
+
+logging:
+  pattern:
+    level: trace_id=%mdc{trace_id} span_id=%mdc{span_id} trace_flags=%mdc{trace_flags} %5p
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+    import: configserver:http://config-server:8888
+
+---
+# Prod profile
+spring:
+  config:
+    activate:
+      on-profile: ecs
+
+eureka:
+  instance:
+    ipAddress: ${VISITS_SERVICE_IP:visits-service}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: chaos-monkey
+    import: configserver:http://config-server:8888
+
+chaos:
+  monkey:
+    enabled: true
+    watcher:
+      service: true
+      controller: true
+      restController: true
+      component: true
+    assaults:
+      latencyActive: false
+      exceptionsActive: true
+      level: 5
+
+management:
+  endpoint:
+    chaosmonkey:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
