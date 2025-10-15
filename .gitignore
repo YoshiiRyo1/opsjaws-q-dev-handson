@@ -1,0 +1,52 @@
+# test
+**petclinic_test_plan.jmx
+
+# terraform
+**/.terraform/
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/.external_modules/
+**/.terraform.lock.hcl
+
+# python
+**/__pycache__/
+venv/
+.venv/
+env/
+.env
+
+# CDK
+cdk.out/
+*.assets.json
+*.template.json
+
+# Node.js
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Jenv
+.java-version
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# IntelliJ IDEA
+.idea
+*.iml
+
+# Visual Studio Code
+.factorypath
+.vscode/
+
+# Branch switching
+generated/
+
+# Mac OS
+*.DS_Store
