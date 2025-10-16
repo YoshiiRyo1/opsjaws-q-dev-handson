@@ -19,7 +19,8 @@ docker tag public.ecr.aws/u2n5q9y7/spring-petclinic-config-server:latest ${REPOS
 docker push ${REPOSITORY_PREFIX}/springcommunity/spring-petclinic-config-server:latest
 
 aws ecr create-repository --repository-name springcommunity/spring-petclinic-visits-service --region ${REGION} --no-cli-pager || true
-docker tag springcommunity/spring-petclinic-visits-service:latest ${REPOSITORY_PREFIX}/springcommunity/spring-petclinic-visits-service:latest
+docker pull public.ecr.aws/u2n5q9y7/spring-petclinic-visits-service:latest
+docker tag public.ecr.aws/u2n5q9y7/spring-petclinic-visits-service:latest ${REPOSITORY_PREFIX}/springcommunity/spring-petclinic-visits-service:latest
 docker push ${REPOSITORY_PREFIX}/springcommunity/spring-petclinic-visits-service:latest
 
 aws ecr create-repository --repository-name springcommunity/spring-petclinic-vets-service --region ${REGION} --no-cli-pager || true
