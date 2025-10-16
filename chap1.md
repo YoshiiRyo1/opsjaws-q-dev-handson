@@ -104,3 +104,10 @@ $env:Path = "C:\Users\<UserName>\.local\bin;$env:Path"
 ```bash
 uv --version
 ```
+
+<table>
+<tr>
+<td align="right" style="padding: 20px;"><a href="chap2.md">次へ</a></td>
+<td align="center" style="padding: 20px;"><a href="README.md">目次に戻る</a></td>
+</tr>
+</table>

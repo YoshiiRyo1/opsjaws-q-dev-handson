@@ -194,3 +194,13 @@ aws cloudformation list-stack-resources \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
   --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
 ```
+
+---
+
+<table>
+<tr>
+<td align="left" style="padding: 20px;"><a href="chap1.md">前へ</a></td>
+<td align="right" style="padding: 20px;"><a href="chap3.md">次へ</a></td>
+<td align="center" style="padding: 20px;"><a href="README.md">目次に戻る</a></td>
+</tr>
+</table>

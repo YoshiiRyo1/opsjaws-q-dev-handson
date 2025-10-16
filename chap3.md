@@ -216,3 +216,11 @@ Q Developer CLI にははっきりと明確な指示を出したいのでリソ�
 
 Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
 ```
+
+<table>
+<tr>
+<td align="left" style="padding: 20px;"><a href="chap2.md">前へ</a></td>
+<td align="right" style="padding: 20px;"><a href="chap4.md">次へ</a></td>
+<td align="center" style="padding: 20px;"><a href="README.md">目次に戻る</a></td>
+</tr>
+</table>

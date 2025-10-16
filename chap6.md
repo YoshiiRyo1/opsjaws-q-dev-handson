@@ -85,3 +85,11 @@ aws s3api list-object-versions \
 # バケットを削除
 aws s3 rb s3://$BUCKET_NAME
 ```
+
+
+<table>
+<tr>
+<td align="left" style="padding: 20px;"><a href="chap5.md">前へ</a></td>
+<td align="center" style="padding: 20px;"><a href="README.md">目次に戻る</a></td>
+</tr>
+</table>
