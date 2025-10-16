@@ -87,9 +87,14 @@ aws s3 rb s3://$BUCKET_NAME
 ```
 
 
-<table>
-<tr>
-<td align="left" style="padding: 20px;"><a href="chap5.md">前へ</a></td>
-<td align="center" style="padding: 20px;"><a href="README.md">目次に戻る</a></td>
-</tr>
-</table>
+Copilot2 分前
+[nitpick] 最終章でもナビゲーションにテーブルを使用しています。全章で一貫したアクセシビリティ配慮のある構造 (リストや ) に統一することで保守性と利用者体験を改善できます。
+
+Suggested change:
+
+<nav aria-label="章ナビゲーション">  
+  <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
+    <li style="padding: 20px; text-align: left;"><a href="chap5.md">前へ</a></li>  
+    <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>  
+  </ul>  
+</nav>  
