@@ -14,6 +14,7 @@ q login
   Use with Pro license
 
 # エージェントを指定してq chatを起動します
+export AWS_DEFAULT_REGION=$AWS_REGION
 q chat --agent opsjaws
 ```
 
@@ -244,9 +245,6 @@ aws ecs delete-service --region us-east-1 --cluster ecs-pet-clinic-demo --servic
 改善されているようです！
 
 ここまでで自分で手を動かすことなくトラブルシューティングができました。
-
-
-
 
 ## AWS Well-Architected フレームワークによるアーキテクチャ診断
 
@@ -529,6 +527,285 @@ Pet Clinic アプリケーションのセキュリティ設定を包括的に診
 ```
 
 このセキュリティ診断により、現在の環境のセキュリティ状況を把握し、体系的にセキュリティを強化することができます。
+
+## トレースの調査
+
+ECS サービスの障害をトレースから調査してみましょう。  
+
+```bash
+[opsjaws] > トレースで障害が見受けられる。どのECSサービスが障害なのかを教えて。リージョンは us-west-2 を指定する。
+```
+
+<details><summary>回答例</summary>
+
+```bash
+> トレースで障害が見受けられるとのことですが、ECSサービスの障害を特定するために、まずCloudWatch Application Signalsを使ってトレース情報を確認しましょう。
+
+
+🛠️  Using tool: use_aws
+ ⋮ 
+ ● Running aws cli command:
+
+（省略）
+
+> ## 障害の特定結果
+
+トレースで障害が見受けられるECSサービスを特定しました：
+
+### 障害のあるサービス
+
+1. pet-clinic-insurance-service - 主要な障害
+   • **エラー内容**: Eurekaサーバーへの接続エラー
+   • **具体的なエラー**: EurekaServerConnectionException: All eureka servers in all zone are down!
+   • **影響**: サービス発見機能が正常に動作していない
+
+2. pet-clinic-discovery-server - 関連する障害
+   • **エラー内容**: インスタンス情報の複製に問題
+   • **具体的なエラー**: TransportException: Cannot execute request on any known server
+   • **影響**: サービス登録・発見の中核機能に障害
+
+### 根本原因
+
+Pet Clinicアプリケーションのマイクロサービス間でのサービス発見（Service Discovery）機能に障害が発生しています。Eurekaサーバー（discovery-server）との通信が正常に行えず、各サービスが互いを発見できない状態になっています。
+
+### 推奨対応
+
+1. pet-clinic-discovery-serverの再起動
+2. ネットワーク設定の確認（セキュリティグループ、サブネット設定）
+3. サービス間の依存関係の確認と順次再起動
+
+この障害により、マイクロサービス間の通信が正常に行えず、アプリケーション全体の機能に影響が出ている可能性があります。
+```
+</details>
+<br>  
+
+障害があるサービスが特定できました。推奨対応1 のサービス再起動をしてみましょう。
+
+```bash
+[opsjaws] > 障害があるサービスをフォースデプロイしたい。AWS CLI コマンドを教えて。
+```
+
+<details><summary>回答例</summary>
+
+```bash
+> 障害のあるサービスをフォースデプロイするAWS CLIコマンドをお教えします。
+
+## pet-clinic-discovery-server のフォースデプロイ
+
+bash
+aws ecs update-service \
+  --cluster ecs-pet-clinic-demo \
+  --service pet-clinic-discovery-server \
+  --force-new-deployment \
+  --region us-west-2
+
+
+## pet-clinic-insurance-service のフォースデプロイ
+
+bash
+aws ecs update-service \
+  --cluster ecs-pet-clinic-demo \
+  --service pet-clinic-insurance-service \
+  --force-new-deployment \
+  --region us-west-2
+
+
+## 推奨実行順序
+
+1. まずdiscovery-serverを再起動（他のサービスが依存しているため）
+2. 次にinsurance-serviceを再起動
+
+## 両方を一度に実行する場合
+
+bash
+# Discovery serverを先に再起動
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-discovery-server --force-new-deployment --region us-west-2
+
+# 少し待ってからinsurance serviceを再起動
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-insurance-service --force-new-deployment --region us-west-2
+
+
+--force-new-deploymentフラグにより、現在のタスク定義を使用して新しいタスクが強制的に開始され、既存のタスクが置き換えられます。
+```
+</details>
+<br>  
+
+再起動コマンドを実行しました。解決したかを確認しましょう。
+
+```bash
+[opsjaws] > discovery と insurance を再起動した。discovery のログから insurance が正常にレジストされているか確認して。
+```
+
+<details><summary>回答例</summary>
+
+```bash
+> ## 確認結果
+
+✅ insurance-serviceは正常にdiscovery-serverに登録されています
+
+### 登録状況の詳細
+
+1. INSURANCE-SERVICE登録成功:
+   • 01:33:32 - 初回登録: Registered instance INSURANCE-SERVICE/10.0.4.197:insurance-service:8000 with status UP
+   • 01:33:39 - 再登録確認
+   • 01:33:44 - 再登録確認
+
+2. BILLING-SERVICE登録成功:
+   • 01:35:55 - Registered instance BILLING-SERVICE/10.0.4.241:billing-service:8000 with status UP
+
+3. Discovery Server状態:
+   • 01:31:01 - Eureka Server正常起動完了
+   • 定期的なevict taskが正常実行中（1分間隔）
+
+### 現在の状況
+• **discovery-server**: ✅ 正常動作
+• **insurance-service**: ✅ 正常登録済み  
+• **billing-service**: ✅ 正常登録済み
+
+insurance-serviceの再起動は成功し、discovery-serverへの登録も正常に完了しています。
+```
+</details>  
+<br>  
+
+正常動作になりました。完璧なオペレーションです。  
+pet-clinic-api-gateway もエラーが多いように感じるので、追加で調査を依頼してみましょう。
+
+```bash
+[opsjaws] > ecsサービス pet-clinic-api-gateway も障害が出ているようだ。トレースから調査して。
+```
+
+<details><summary>回答例</summary>
+
+```bash
+> pet-clinic-api-gatewayの障害をトレースから調査します。
+
+
+🛠️  Using tool: use_aws (trusted)
+ ⋮ 
+ ● Running aws cli command:
+
+（省略）
+
+> ## pet-clinic-api-gateway の障害調査結果
+
+### 障害内容
+pet-clinic-api-gatewayでも同様のEurekaサーバー接続エラーが発生しています。
+
+### 具体的なエラー
+• **エラーメッセージ**: Connect to http://localhost:8761 [localhost/127.0.0.1] failed: Connection refused
+• **根本原因**: TransportException: Cannot execute request on any known server
+• **影響**: API Gatewayがサービス発見サーバーに登録できない
+
+### 問題の詳細
+1. localhost:8761への接続失敗 - Eurekaサーバーへの接続が拒否されている
+2. サービス登録失敗 - API-GATEWAYサービスがEurekaに登録できない
+3. インスタンス情報複製エラー - サービス発見機能が正常に動作していない
+
+### 障害の影響範囲
+現在確認された障害サービス：
+1. pet-clinic-discovery-server (Eurekaサーバー本体)
+2. pet-clinic-insurance-service 
+3. pet-clinic-api-gateway ← 新たに確認
+
+### 推奨対応順序
+bash
+# 1. Discovery serverを最初に再起動（他のサービスが依存）
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-discovery-server --force-new-deployment --region us-west-2
+
+# 2. API Gatewayを再起動（フロントエンド）
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-api-gateway --force-new-deployment --region us-west-2
+
+# 3. Insurance serviceを再起動
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-insurance-service --force-new-deployment --region us-west-2
+
+
+全てのサービスが同じ根本原因（Eurekaサーバーの障害）により影響を受けています。
+```
+</details>
+<br>
+
+ECS サービスの同士の接続に問題があるかもしれません。追加調査を依頼してみましょう。  
+
+<details><summary>回答例</summary>
+
+```bash
+> ## 原因の特定
+
+✅ タスク定義は正しく設定されています
+
+環境変数を確認すると：
+"DISCOVERY_SERVER_URL": "http://pet-clinic-discovery-server-DNS.ecs-pet-clinic:8761/eureka"
+
+
+問題の原因：
+1. アプリケーション設定の優先順位: Spring Bootアプリケーション内の設定ファイル（application.yml/properties）でEurekaサーバーのURLがlocalhostにハードコードされている可能性
+2. プロファイル設定の問題: SPRING_PROFILES_ACTIVE=ecsが設定されているが、ecsプロファイル用の設定が正しく適用されていない
+
+## 確認方法
+
+アプリケーションの設定ファイルを確認する必要がありますが、現在のログから判断すると：
+
+ログのエラーメッセージ：
+Connect to http://localhost:8761 [localhost/127.0.0.1] failed: Connection refused
+
+
+これは環境変数DISCOVERY_SERVER_URLが無視され、アプリケーション内部の設定（おそらくapplication-ecs.yml）でlocalhostが指定されているか、デフォルト設定が使用されていることを示しています。
+
+## 解決策
+
+api-gatewayを再起動して、設定が正しく読み込まれるか確認：
+
+bash
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-api-gateway --force-new-deployment --region us-west-2
+
+
+再起動後もlocalhostに接続する場合は、アプリケーションのソースコード内の設定ファイルを修正する必要があります。
+```
+</details>
+<br>
+
+Service Discovery は正しく動作いるのでしょうか？念のため確認してみましょう。
+
+```bash
+[opsjaws] > discovery サービスの Service Discovery は正しい？
+```
+
+<details><summary>回答例</summary>
+
+```bash
+> ## discovery-serverのService Discovery設定確認結果
+
+✅ Service Discovery設定は正しく構成されています
+
+### 設定詳細
+1. Service Registry: srv-27n7tqx3f3zjluk7 に正しく登録
+2. DNS名: pet-clinic-discovery-server-DNS
+3. ネームスペース: ecs-pet-clinic (プライベートDNS)
+4. 完全なDNS名: pet-clinic-discovery-server-DNS.ecs-pet-clinic
+5. DNSレコード: Aレコード、TTL 300秒、MULTIVALUE ルーティング
+
+### 確認結果
+• **Service Discovery**: ✅ 正常
+• **DNS設定**: ✅ 正常  
+• **ネームスペース**: ✅ 正常
+• **ECSサービス登録**: ✅ 正常
+
+問題ではない箇所：
+• Service Discovery設定
+• DNS名前解決
+• ネームスペース設定
+
+実際の問題：
+api-gatewayアプリケーションが環境変数DISCOVERY_SERVER_URLを正しく読み取っていない、またはSpring Bootの設定で上書きされている可能性が高いです。
+
+Service Discovery自体は完全に正常に動作しています。
+```
+</details>  
+<br>
+
+ソースコードを確認したほうが良さそうです。ここまで解析できれば Q Developer CLI の調査では十分でしょう。
+
+
 ## Tips
 ### AmazonQ.mdのリソース一覧記載
 Q Developer CLIは、AmazonQ.mdに記載されたリソースを認識してくれます。
