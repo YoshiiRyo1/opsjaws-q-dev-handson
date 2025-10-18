@@ -98,6 +98,15 @@ class PetResource {
         Span.current().setAttribute(WellKnownAttributes.OWNER_ID, ownerId);
         Span.current().setAttribute(WellKnownAttributes.ORDER_ID, petId);
 
+        // Check if Bedrock is enabled via environment variable
+        String bedrockEnable = System.getenv("BEDROCK_ENABLE");
+        boolean isBedrockEnabled = bedrockEnable != null && bedrockEnable.equalsIgnoreCase("true");
+        
+        if (!isBedrockEnabled) {
+            log.info("Bedrock is disabled. Skipping Bedrock-related processing.");
+            return;
+        }
+
         log.info("bedrockAgentV1Service Getting knowledge base");
         bedrockAgentV1Service.getKnowledgeBase();
         log.info("bedrockAgentV1Service FINISH Getting knowledge base");
