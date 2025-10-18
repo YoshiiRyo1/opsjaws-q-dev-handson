@@ -1,4 +1,4 @@
-# Q Developer マネコン やってみる
+# Q Developer マネジメントコンソール（マネコン） やってみる
 Q Developer はマネジメントコンソール(マネコン)からも利用でき、CloudWatch と統合して利用できる[運用調査機能](https://aws.amazon.com/jp/blogs/news/investigate-and-remediate-operational-issues-with-amazon-q-developer/)は様々なメトリクスに基づいて障害やエラーの原因分析を行うことができます。
 
 サンプルアプリケーションで発生しているエラーに対して運用調査機能を利用してみましょう。
@@ -6,13 +6,13 @@ Q Developer はマネジメントコンソール(マネコン)からも利用で
 ## Q Developer の運用調査機能やってみる
 ALBで`HTTPCode_Target_5XX_Count`が多発しているため、このメトリクスを起点にどのようなエラーが発生しているか調査してみます。
 
-まず、マネコンの CloudWatch 画面から `All metrics` → `ApplicationELB` → `Per AppELB, per AZ, per TG Metrics` → `サンプルアプリケーション用に作成された ALB の HTTPCode_Target_5XX_Count メトリクス`をチェックし `Start a new investigation`を選択します。
+まず、マネコンの CloudWatch 画面から `All metrics` → `ApplicationELB` → `Per AppELB, per AZ, per TG Metrics` → `サンプルアプリケーション用に作成された ALB(ecs-load-balancer) の HTTPCode_Target_5XX_Count メトリクス`をチェックし `Start a new investigation`を選択します。
 
 ![CloudWatch メトリクスから調査を開始](img/chap5_1.png)
 
 右側に運用調査機能用のパネルが展開されるため、調査タイトルの入力、エラーが発生しはじめた時刻を選択し `Start investigation`を選択します。
 
-少し待つと関連するメトリクスの一覧やエラー原因の仮説がいくつか表示されます。仮説の一例を以下に載せますが、みなさまの環境でもどんな仮説が出るのか確認してみてください。現在は英語のみに対応しているので日本語訳を載せます。
+数分程待つと関連するメトリクスの一覧やエラー原因の仮説がいくつか表示されます。仮説の一例を以下に載せますが、みなさまの環境でもどんな仮説が出るのか確認してみてください。現在は英語のみに対応しているので日本語訳を載せます。
 
 ![関連メトリクス及びエラー原因の仮説](img/chap5_2.png)
 
