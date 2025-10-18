@@ -1,4 +1,4 @@
-# Q Developer CLI インストール、AWS CLI インストール、uv インストール
+# Q Developer CLI インストール、AWS CLI インストール、uv インストール、Application Signals 有効化
 
 ハンズオンを進めるために必要なツール類をインストールします。  
 
@@ -36,7 +36,7 @@ unzip q.zip
 **Windows**
 
 Q Developer CLI は Windows ネイティブには対応していません。  
-Windows ユーザーの方はご面倒でも、EC2 Linux インスタンスを立てて、そちらでハンズオンをお願いします。  
+Windows ユーザーの方はご面倒でも、EC2 Linux インスタンスを立てるか、[WSL を使って](https://dev.to/aws/the-essential-guide-to-installing-amazon-q-developer-cli-on-windows-lmh)ハンズオンをお願いします。  
 
 ## Q Developer CLI の動作確認
 
@@ -86,17 +86,6 @@ MCP Server を使用するために uv をインストールします。
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-**Windows**
-
-```powershell
-Set-ExecutionPolicy RemoteSigned -Scope Process
-
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# 上のコマンド実行後に Path を設定するコマンドが表示されているはずです。コピペで実行してください。
-$env:Path = "C:\Users\<UserName>\.local\bin;$env:Path"
-```
-
 ## uv 動作確認
 
 `uv --version` コマンドで動作確認します。バージョンが表示されれば OK です。  
@@ -105,6 +94,27 @@ $env:Path = "C:\Users\<UserName>\.local\bin;$env:Path"
 uv --version
 ```
 
+## Application Signals 有効化
+
+[CloudWatch](https://ap-northeast-1.console.aws.amazon.com/cloudwatch/home?region=ap-northeast-1#application-signals:services) 画面から、左ペインの **Application Signals** → **サービス** を選択します。  
+初回アクセス時には以下のボタンが表示されます。**サービスの検出を開始** をクリックしてください。  
+
+![alt text](./img/chap1_as_start.png)
+
+自分のアカウントでこのステップを初めて完了すると、**AWSServiceRoleForCloudWatchApplicationSignals** サービスリンクロールが作成されます。
+このロールの詳細については、[CloudWatch Application Signals のサービスリンクロールのアクセス許可](https://docs.aws.amazon.com/ja_jp/AmazonCloudWatch/latest/monitoring/using-service-linked-roles.html#service-linked-role-signals) を参照してください。  
+
+
+次に **Application Signals を有効にする** ボタンをクリックします。
+
+![alt text](./img/chap1_as_enable.png)
+
+
+次の画面で **ECS** にチェックを入れ、**完了** ボタンをクリックします。  
+
+![alt text](./img/chap1_as_ecs.png)
+
+----
 <nav aria-label="ページナビゲーション">  
   <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
     <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>  

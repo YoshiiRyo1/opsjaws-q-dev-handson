@@ -20,10 +20,3 @@ Systems architecture / Systems Operations specialist, AWS specialty
 # MCP Server Preferences
 
 Use `awslabs.core-mcp-server` in every situation.  
-
-# Resources
-
-Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
-
-| LogicalResourceId | PhysicalResourceId | ResourceType |
-| ----------------- | ------------------ | ------------ |

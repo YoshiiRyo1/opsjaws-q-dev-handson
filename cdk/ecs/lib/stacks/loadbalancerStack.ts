@@ -23,6 +23,13 @@ export class LoadBalancerStack extends Stack {
     constructor(scope: Construct, id: string, props: LoadBalancerStackProps) {
         super(scope, id, props);
 
+        // Disable rollback on failure
+        const cfnStack = this.node.defaultChild as any;
+        if (cfnStack) {
+            cfnStack.cfnOptions = cfnStack.cfnOptions || {};
+            cfnStack.cfnOptions.disableRollback = true;
+        }
+
         // Create Application Load Balancer (ALB)
         this.loadBalancer = new ApplicationLoadBalancer(this, 'LoadBalancer', {
             loadBalancerName: this.LOAD_BALANCER_NAME,
@@ -41,12 +48,12 @@ export class LoadBalancerStack extends Stack {
             protocol: ApplicationProtocol.HTTP,
             targetType: TargetType.IP,
             healthCheck: {
-                path: '/',
+                path: '/actuator/health',
                 protocol: Protocol.HTTP,
-                healthyThresholdCount: 5,
-                unhealthyThresholdCount: 2,
-                interval: Duration.seconds(240),
-                timeout: Duration.seconds(60),
+                healthyThresholdCount: 4,
+                unhealthyThresholdCount: 10,
+                interval: Duration.seconds(30),
+                timeout: Duration.seconds(29),
             },
         });
 
