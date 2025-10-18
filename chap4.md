@@ -14,8 +14,8 @@ q login
   Use with Pro license
 
 # エージェントを指定してq chatを起動します
-export AWS_DEFAULT_REGION=$AWS_REGION
-q chat --agent opsjaws
+# '--' と 'region=$AWS_REGION' の間にスペースを入れることを忘れないでください
+q chat --agent opsjaws -- region=$AWS_REGION
 ```
 
 ## エラー原因の調査
