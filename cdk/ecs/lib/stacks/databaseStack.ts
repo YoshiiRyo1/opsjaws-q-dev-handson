@@ -25,6 +25,13 @@ export class RdsDatabaseStack extends Stack {
     constructor(scope: Construct, id: string, props: RdsDatabaseStackProps) {
         super(scope, id, props);
 
+        // Disable rollback on failure
+        const cfnStack = this.node.defaultChild as any;
+        if (cfnStack) {
+            cfnStack.cfnOptions = cfnStack.cfnOptions || {};
+            cfnStack.cfnOptions.disableRollback = true;
+        }
+
         this.vpc = props.vpc;
 
         // Create DB Subnet Group

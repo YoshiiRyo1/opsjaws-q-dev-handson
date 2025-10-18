@@ -13,6 +13,13 @@ export class ServiceDiscoveryStack extends Stack {
     constructor(scope: Construct, id: string, props: ServiceDiscoveryStackProps) {
         super(scope, id);
 
+        // Disable rollback on failure
+        const cfnStack = this.node.defaultChild as any;
+        if (cfnStack) {
+            cfnStack.cfnOptions = cfnStack.cfnOptions || {};
+            cfnStack.cfnOptions.disableRollback = true;
+        }
+
         this.namespace = new PrivateDnsNamespace(this, 'Namespace', {
             vpc: props.vpc,
             name: 'ecs-pet-clinic',

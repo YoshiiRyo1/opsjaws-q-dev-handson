@@ -24,6 +24,13 @@ export class PetClinicNetworkStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
+        // Disable rollback on failure
+        const cfnStack = this.node.defaultChild as any;
+        if (cfnStack) {
+            cfnStack.cfnOptions = cfnStack.cfnOptions || {};
+            cfnStack.cfnOptions.disableRollback = true;
+        }
+
         // Create VPC
         this.vpc = new Vpc(this, 'VPC', {
             maxAzs: 2,
