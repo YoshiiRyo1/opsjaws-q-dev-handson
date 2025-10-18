@@ -52,7 +52,7 @@ AWS CLI のプロファイルとリージョンを環境変数にセットしま
 export AWS_PROFILE=opsjaws-handson  # 事前に作成したプロファイルを指定
 export AWS_REGION=us-west-2  # us-west-2 (オレゴン) リージョンを指定
 
-# ※このコマンドは現在のターミナルセッションのみ有効です
+# これらのコマンドは現在のターミナルセッションのみ有効です
 # 新しいターミナルを開いた場合は再度実行してください
 ```
 
@@ -134,10 +134,21 @@ for REPO in $REPOS; do
 done
 ```
 
-
 ## ECS サンプルアプリケーション デプロイ
 
-コンテナイメージビルドが成功したら、サンプルアプリケーションをデプロイします。  
+CodeBuild リソースのデプロイの完了を待っている間に ECS サンプルアプリケーションをデプロイします。  
+
+新しいターミナルを開き、AWS CLI のプロファイルとリージョンを環境変数にセットします。  
+
+```bash
+export AWS_PROFILE=opsjaws-handson  # 事前に作成したプロファイルを指定
+export AWS_REGION=us-west-2  # us-west-2 (オレゴン) リージョンを指定
+
+# これらのコマンドは現在のターミナルセッションのみ有効です
+# 新しいターミナルを開いた場合は再度実行してください
+```
+
+サンプルアプリケーションをデプロイします。  
 
 ```bash
 # Amazon ECS のサービスリンクロールが存在しない場合のみ作成する
@@ -147,52 +158,81 @@ aws iam get-role --role-name AWSServiceRoleForECS 2>/dev/null || \
 cd scripts/ecs/appsignals && ./setup-ecs-demo.sh --region=$AWS_REGION
 ```
 
+## ECS サンプルアプリケーション トラブルシューティング
 
-## リソース一覧を AmazonQ.md に出力
+CloudFormation の **EcsClusterStack** スタックが完了しない場合は一旦すべての ECS サービスを停止してください。
 
-CDK で作成リソースの一覧を `AmazonQ.md` に出力します。  
+```bash
+# 各ECSサービスのタスク数を0に設定
+export AWS_PAGER=""
+ECS_COUNT=0
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-admin-server --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-api-gateway --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-billing-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-config-server --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-customers-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-discovery-server --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-insurance-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-vets-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-visits-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service traffic-generator --desired-count $ECS_COUNT --region $AWS_REGION
+```
+
+
+## リソース一覧を resources.md に出力
+
+CDK で作成リソースの一覧を `resources.md` に出力します。  
 こうすることで Q Developer CLI がリソースを認識しやすくなります。  
 
 ```bash
+cat << EOF > ./resources.md
+# Resources
+
+Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
+
+| LogicalResourceId | PhysicalResourceId | ResourceType |
+| ----------------- | ------------------ | ------------ |
+EOF
+
 aws cloudformation list-stack-resources \
   --stack-name ApplicationSignalsCodeBuildStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name PetClinicNetworkStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name LogStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name LoadBalancerStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name RdsDatabaseStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name ServiceDiscoveryStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name IamRolesStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name EcsClusterStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 ```
 
 ---

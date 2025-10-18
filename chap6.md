@@ -86,13 +86,28 @@ aws s3api list-object-versions \
 aws s3 rb s3://$BUCKET_NAME
 ```
 
+## ECR リポジトリの削除
 
-Copilot2 分前
-[nitpick] 最終章でもナビゲーションにテーブルを使用しています。全章で一貫したアクセシビリティ配慮のある構造 (リストや ) に統一することで保守性と利用者体験を改善できます。
+```bash
+# イメージが残っていても強制削除する場合は --force オプションを使用
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-api-gateway --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-discovery-server --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-config-server --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-visits-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-vets-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-customers-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-admin-server --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name python-petclinic-insurance-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name python-petclinic-billing-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name nodejs-petclinic-nutrition-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name traffic-generator --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name dotnet-petclinic-payment --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name otel-collector --region ${AWS_REGION} --force --no-cli-pager || true
+```
 
-Suggested change:
+---
 
-<nav aria-label="章ナビゲーション">  
+<nav aria-label="ページナビゲーション">  
   <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
     <li style="padding: 20px; text-align: left;"><a href="chap5.md">前へ</a></li>  
     <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>  

@@ -11,6 +11,13 @@ export class IamRolesStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
+        // Disable rollback on failure
+        const cfnStack = this.node.defaultChild as any;
+        if (cfnStack) {
+            cfnStack.cfnOptions = cfnStack.cfnOptions || {};
+            cfnStack.cfnOptions.disableRollback = true;
+        }
+
         // Create IAM Roles for ECS Task
         this.ecsTaskRole = new Role(this, 'EcsTaskRole', {
             roleName: this.ECS_TASK_ROLE_NAME,

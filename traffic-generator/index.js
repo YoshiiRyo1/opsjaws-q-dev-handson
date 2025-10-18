@@ -23,7 +23,7 @@ const pets = new Map([
     [11, 9],
     [12, 10],
     [13, 10]
-  ]);
+]);
 
 
 function getRandomNumber(min, max) {
@@ -99,7 +99,7 @@ scheduleHighLoad();
 const invalidRequestTask = cron.schedule('* * * * *', () => {
     const lowLoad = getRandomNumber(2, 5);
     for (let i = 0; i < lowLoad; i++) {
-        sleep(2*1000);
+        sleep(2 * 1000);
         console.log('send invalid traffic: ' + (i + 1))
         axios.get(`${baseUrl}/api/gateway/owners/-1`, { timeout: 10000 })
             .catch(err => {
@@ -113,7 +113,7 @@ invalidRequestTask.start();
 const bedrockRequestTask = cron.schedule('* * * * *', () => {
     const lowLoad = getRandomNumber(1, 2);
     for (let i = 0; i < lowLoad; i++) {
-        sleep(5*1000);
+        sleep(5 * 1000);
         console.log('calling bedrock: ' + (i + 1))
         axios.get(`${baseUrl}/api/customer/diagnose/owners/1/pets/1`, { timeout: 30000 })
             .catch(err => {
@@ -144,7 +144,7 @@ createOwnerLowTrafficTask.start();
 
 const createOwnerHighTrafficTask = cron.schedule('*/5 * * * *', () => {
     const highLoad = getRandomNumber(50, 80);
-    sleep(getRandomNumber(1,2)*60*1000);
+    sleep(getRandomNumber(1, 2) * 60 * 1000);
     for (let i = 0; i < highLoad; i++) {
         console.log('create owner high traffic: ' + (i + 1))
         sleep(3 * 1000)
@@ -161,7 +161,7 @@ createOwnerHighTrafficTask.start();
 const postPetsLowTrafficTask = cron.schedule('*/2 * * * *', () => {
     console.log('add 1 pet every 2 minutes');
     const name = "lastName" + new Date().toLocaleTimeString();
-    const data = {"id":0,"name":name ,"birthDate":"2023-11-20T08:00:00.000Z","typeId":"1"}
+    const data = { "id": 0, "name": name, "birthDate": "2023-11-20T08:00:00.000Z", "typeId": "1" }
     axios.post(`${baseUrl}/api/customer/owners/7/pets`, data, { timeout: 10000 })
         .catch(err => {
             console.error("Failed to post /api/customer/owners/7/pets, error: " + (err.response ? err.response.data : err.toString()));
@@ -171,56 +171,59 @@ const postPetsLowTrafficTask = cron.schedule('*/2 * * * *', () => {
 postPetsLowTrafficTask.start();
 
 const postPetsHighTrafficTask = cron.schedule('0 * * * *', async () => {
-sleepMins = getRandomNumber(1,10);
-console.log(`sleep ${sleepMins} minutes`);
-await sleep(sleepMins*60*1000);
-console.log('add 2 pets within 1 minute');
-for (let i = 0; i < 2; i++) {
+    sleepMins = getRandomNumber(1, 10);
+    console.log(`sleep ${sleepMins} minutes`);
+    await sleep(sleepMins * 60 * 1000);
     console.log('add 2 pets within 1 minute');
-    const name = "lastName" + new Date().toLocaleTimeString();
-    const data = {"id": 0, "name": name, "birthDate": "2023-11-20T08:00:00.000Z", "typeId": "2"}
-    await axios.post(`${baseUrl}/api/customer/owners/7/pets`, data, {timeout: 10000})
-        .catch(err => {
-            console.error("Failed to post /api/customer/owners/7/pets, error: " + (err.response ? err.response.data : err.toString()));
-        }); // Catch and log errors
-}
+    for (let i = 0; i < 2; i++) {
+        console.log('add 2 pets within 1 minute');
+        const name = "lastName" + new Date().toLocaleTimeString();
+        const data = { "id": 0, "name": name, "birthDate": "2023-11-20T08:00:00.000Z", "typeId": "2" }
+        await axios.post(`${baseUrl}/api/customer/owners/7/pets`, data, { timeout: 10000 })
+            .catch(err => {
+                console.error("Failed to post /api/customer/owners/7/pets, error: " + (err.response ? err.response.data : err.toString()));
+            }); // Catch and log errors
+    }
 }, { scheduled: false });
 
 postPetsHighTrafficTask.start();
 
 
-const lowTrafficPaymentTask = cron.schedule('* * * * *', () => {
-    const lowLoad = getRandomNumber(lowLoadMinRequests, lowLoadMaxRequests);
-    for (let i = 0; i < lowLoad * 2; i++) {
-        console.log('send low load payment traffic: ' + (i + 1))
-        const amount = getRandomNumber(1,111)
-        const pet = getRandomNumber(1, 13);
-        const owner = pets.get(pet);
-        const url = `${baseUrl}/api/payments/owners/${owner}/pets/${pet}`;
-        postPaymentData(url, amount, `low-traffic-payment`)
-            .catch(err => {
-                console.error("Failed to post to " + url + ". Error: " + err.message);
-    
-            }); // Catch and log errors
-        axios.get(url, { timeout: 20000 })
-            .catch(err => {
-                console.error("Failed to get " + url + ". Error: " + err.message);
-            }); // Catch and log errors
-    }
-   
-}, { scheduled: false });
+// Payment service is not deployed in ECS, so these tasks are commented out to avoid errors
+// If you deploy the payment service, uncomment these tasks
 
-lowTrafficPaymentTask.start();
+// const lowTrafficPaymentTask = cron.schedule('* * * * *', () => {
+//     const lowLoad = getRandomNumber(lowLoadMinRequests, lowLoadMaxRequests);
+//     for (let i = 0; i < lowLoad * 2; i++) {
+//         console.log('send low load payment traffic: ' + (i + 1))
+//         const amount = getRandomNumber(1,111)
+//         const pet = getRandomNumber(1, 13);
+//         const owner = pets.get(pet);
+//         const url = `${baseUrl}/api/payments/owners/${owner}/pets/${pet}`;
+//         postPaymentData(url, amount, `low-traffic-payment`)
+//             .catch(err => {
+//                 console.error("Failed to post to " + url + ". Error: " + err.message);
 
-const clearPaymentTableTask = cron.schedule('0 * * * *', () => {
-    console.log('clear payment table every 1 hour');
-    axios.delete(`${baseUrl}/api/payments/clean-db`, { timeout: 10000 })
-        .catch(err => {
-            console.error(`${baseUrl}/api/payments/clean-db, error: ` + (err.response ? err.response.data : err.toString()));
-        }); // Catch and log errors
-}, { scheduled: false });
+//             }); // Catch and log errors
+//         axios.get(url, { timeout: 20000 })
+//             .catch(err => {
+//                 console.error("Failed to get " + url + ". Error: " + err.message);
+//             }); // Catch and log errors
+//     }
 
-clearPaymentTableTask.start();
+// }, { scheduled: false });
+
+// lowTrafficPaymentTask.start();
+
+// const clearPaymentTableTask = cron.schedule('0 * * * *', () => {
+//     console.log('clear payment table every 1 hour');
+//     axios.delete(`${baseUrl}/api/payments/clean-db`, { timeout: 10000 })
+//         .catch(err => {
+//             console.error(`${baseUrl}/api/payments/clean-db, error: ` + (err.response ? err.response.data : err.toString()));
+//         }); // Catch and log errors
+// }, { scheduled: false });
+
+// clearPaymentTableTask.start();
 
 const lowTrafficVetsTask = cron.schedule('*/2 * * * *', () => {
     console.log('query vet every 2 minutes');

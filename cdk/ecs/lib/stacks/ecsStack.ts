@@ -96,6 +96,13 @@ export class EcsClusterStack extends Stack {
     constructor(scope: Construct, id: string, props: EcsClusterStackProps) {
         super(scope, id, props);
 
+        // Disable rollback on failure
+        const cfnStack = this.node.defaultChild as any;
+        if (cfnStack) {
+            cfnStack.cfnOptions = cfnStack.cfnOptions || {};
+            cfnStack.cfnOptions.disableRollback = true;
+        }
+
         this.cluster = new Cluster(this, 'EcsCluster', {
             vpc: props.vpc,
             clusterName: this.CLUSTER_NAME,

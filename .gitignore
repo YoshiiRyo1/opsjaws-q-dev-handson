@@ -50,3 +50,6 @@ generated/
 
 # Mac OS
 *.DS_Store
+
+# Q Developer CLI
+resources.md
