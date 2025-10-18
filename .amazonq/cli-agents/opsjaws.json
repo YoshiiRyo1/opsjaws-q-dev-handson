@@ -30,7 +30,7 @@
 	"resources": [
 		"file://AmazonQ.md",
 		"file://README.md",
-		"file://.amazonq/rules/**/*.md"
+		"file://resources.md"
 	],
 	"hooks": {},
 	"toolsSettings": {

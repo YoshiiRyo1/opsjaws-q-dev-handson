@@ -148,51 +148,61 @@ cd scripts/ecs/appsignals && ./setup-ecs-demo.sh --region=$AWS_REGION
 ```
 
 
-## リソース一覧を AmazonQ.md に出力
+## リソース一覧を resources.md に出力
 
-CDK で作成リソースの一覧を `AmazonQ.md` に出力します。  
+CDK で作成リソースの一覧を `resources.md` に出力します。  
 こうすることで Q Developer CLI がリソースを認識しやすくなります。  
 
 ```bash
+cat << EOF > ./resources.md
+
+# Resources
+
+Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
+
+| LogicalResourceId | PhysicalResourceId | ResourceType |
+| ----------------- | ------------------ | ------------ |
+EOF
+
 aws cloudformation list-stack-resources \
   --stack-name ApplicationSignalsCodeBuildStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name PetClinicNetworkStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name LogStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name LoadBalancerStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name RdsDatabaseStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name ServiceDiscoveryStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name IamRolesStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 
 aws cloudformation list-stack-resources \
   --stack-name EcsClusterStack \
   --query 'StackResourceSummaries[*].[LogicalResourceId,PhysicalResourceId,ResourceType]' \
-  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./AmazonQ.md
+  --output text | sed -e 's/\t/|/g' -e 's/^/|/' -e 's/$/|/' >> ./resources.md
 ```
 
 ---
