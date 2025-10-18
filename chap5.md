@@ -102,6 +102,10 @@ CloudWatch 画面の左メニューから **Application Signals (APM)** → **�
 
 ![alt text](./img/chap5_runbook.png)
 
+### 削除
+
+ハンズオンを終える前に、上の手順で作った調査と SLO を削除しておきましょう。
+
 ---
 
 <nav aria-label="ページナビゲーション">  
