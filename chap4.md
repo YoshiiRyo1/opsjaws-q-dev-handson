@@ -49,7 +49,7 @@ Q Developer CLIが調査を行い、結果を返してくれます。
 • **単一ターゲット**: 1つのターゲット（10.0.4.194:8080）のみで負荷分散なし
 推奨対策：
 1. アクセスログ有効化:
-bash
+
 aws elbv2 modify-load-balancer-attributes \
   --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:{ACCOUNT_ID}:loadbalancer/app/ecs-load-balancer/481c43bcfcf02f72 \
   --attributes Key=access_logs.s3.enabled,Value=true Key=access_logs.s3.bucket,Value=your-log-bucket
@@ -125,12 +125,10 @@ pet-clinic-api-gateway サービスが最大19.89秒のレスポンス時間を�
 • インスタンス数: 1
 ### **🎯 最適化提案**
 #### **1. 即座の対応（緊急）**
-bash
 # CPU/メモリ増強
 CPU: 256 → 1024 (1.0 vCPU) - 4倍増
 メモリ: 512MB → 2048MB - 4倍増
 #### **2. スケーリング設定**
-bash
 # 水平スケーリング
 desiredCount: 1 → 3
 Auto Scaling設定:
@@ -724,7 +722,7 @@ aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-insura
 </details>
 <br>
 
-ECS サービスの同士の接続に問題があるかもしれません。追加調査を依頼してみましょう。  
+ECS サービス同士の接続に問題があるかもしれません。追加調査を依頼してみましょう。  
 
 <details><summary>回答例</summary>
 
@@ -764,7 +762,7 @@ aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-api-ga
 </details>
 <br>
 
-Service Discovery は正しく動作いるのでしょうか？念のため確認してみましょう。
+Service Discovery は正しく動作しているのでしょうか？念のため確認してみましょう。
 
 ```bash
 [opsjaws] > discovery サービスの Service Discovery は正しい？
@@ -993,7 +991,7 @@ Service Discovery自体は完全に正常に動作しています。
 </details>
 <br>
 
-[Pricing](https://aws.amazon.com/jp/rds/postgresql/pricing/?pg=pr&loc=3) を若干異なるのは、AWS Pricing API にアクセスできないからでしょう。ファクトチェックは必要です。
+[Pricing](https://aws.amazon.com/jp/rds/postgresql/pricing/?pg=pr&loc=3) に記載の金額と若干異なるのは、AWS Pricing API にアクセスできないからでしょう。ファクトチェックは必要です。
 
 
 
@@ -1001,7 +999,7 @@ Service Discovery自体は完全に正常に動作しています。
 ### AmazonQ.mdのリソース一覧記載
 Q Developer CLIは、AmazonQ.mdに記載されたリソースを認識してくれます。
 
-[chap2](2.md)で追記したリソース一覧を一度消してから、出力の違いを見てみましょう。
+[chap2](./chap2.md)で追記したリソース一覧を一度消してから、出力の違いを見てみましょう。
 
 ```bash
 # Q Developer CLIからログアウト
