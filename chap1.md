@@ -36,7 +36,7 @@ unzip q.zip
 **Windows**
 
 Q Developer CLI は Windows ネイティブには対応していません。  
-Windows ユーザーの方はご面倒でも、EC2 Linux インスタンスを立てて、そちらでハンズオンをお願いします。  
+Windows ユーザーの方はご面倒でも、EC2 Linux インスタンスを立ててるか、[WSL を使って](https://dev.to/aws/the-essential-guide-to-installing-amazon-q-developer-cli-on-windows-lmh)ハンズオンをお願いします。  
 
 ## Q Developer CLI の動作確認
 
@@ -84,17 +84,6 @@ MCP Server を使用するために uv をインストールします。
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**Windows**
-
-```powershell
-Set-ExecutionPolicy RemoteSigned -Scope Process
-
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# 上のコマンド実行後に Path を設定するコマンドが表示されているはずです。コピペで実行してください。
-$env:Path = "C:\Users\<UserName>\.local\bin;$env:Path"
 ```
 
 ## uv 動作確認
