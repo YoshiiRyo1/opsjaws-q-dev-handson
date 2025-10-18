@@ -90,19 +90,19 @@ aws s3 rb s3://$BUCKET_NAME
 
 ```bash
 # イメージが残っていても強制削除する場合は --force オプションを使用
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-api-gateway --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-discovery-server --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-config-server --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-visits-service --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-vets-service --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-customers-service --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name springcommunity/spring-petclinic-admin-server --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name python-petclinic-insurance-service --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name python-petclinic-billing-service --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name nodejs-petclinic-nutrition-service --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name traffic-generator --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name dotnet-petclinic-payment --region ${REGION} --force --no-cli-pager || true
-aws ecr delete-repository --repository-name otel-collector --region ${REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-api-gateway --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-discovery-server --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-config-server --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-visits-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-vets-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-customers-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name springcommunity/spring-petclinic-admin-server --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name python-petclinic-insurance-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name python-petclinic-billing-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name nodejs-petclinic-nutrition-service --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name traffic-generator --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name dotnet-petclinic-payment --region ${AWS_REGION} --force --no-cli-pager || true
+aws ecr delete-repository --repository-name otel-collector --region ${AWS_REGION} --force --no-cli-pager || true
 ```
 
 ---
