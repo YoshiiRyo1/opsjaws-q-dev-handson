@@ -36,7 +36,7 @@ unzip q.zip
 **Windows**
 
 Q Developer CLI は Windows ネイティブには対応していません。  
-Windows ユーザーの方はご面倒でも、EC2 Linux インスタンスを立ててるか、[WSL を使って](https://dev.to/aws/the-essential-guide-to-installing-amazon-q-developer-cli-on-windows-lmh)ハンズオンをお願いします。  
+Windows ユーザーの方はご面倒でも、EC2 Linux インスタンスを立てるか、[WSL を使って](https://dev.to/aws/the-essential-guide-to-installing-amazon-q-developer-cli-on-windows-lmh)ハンズオンをお願いします。  
 
 ## Q Developer CLI の動作確認
 
