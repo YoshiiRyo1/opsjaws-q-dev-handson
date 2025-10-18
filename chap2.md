@@ -158,6 +158,26 @@ aws iam get-role --role-name AWSServiceRoleForECS 2>/dev/null || \
 cd scripts/ecs/appsignals && ./setup-ecs-demo.sh --region=$AWS_REGION
 ```
 
+## ECS サンプルアプリケーション トラブルシューティング
+
+CloudFormation の **EcsClusterStack** スタックが完了しない場合は一旦すべての ECS サービスを停止してください。
+
+```bash
+# 各ECSサービスのタスク数を0に設定
+export AWS_PAGER=""
+ECS_COUNT=0
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-admin-server --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-api-gateway --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-billing-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-config-server --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-customers-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-discovery-server --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-insurance-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-vets-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service pet-clinic-visits-service --desired-count $ECS_COUNT --region $AWS_REGION
+aws ecs update-service --cluster ecs-pet-clinic-demo --service traffic-generator --desired-count $ECS_COUNT --region $AWS_REGION
+```
+
 
 ## リソース一覧を resources.md に出力
 
