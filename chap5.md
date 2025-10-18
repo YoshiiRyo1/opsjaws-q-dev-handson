@@ -46,10 +46,12 @@ pet-clinic-api-gateway ECSサービスおよび関連するバックエンドサ
  ・pet-clinic-discovery-serverサービスのログとステータスを調査して現在のヘルス状態を把握し、サービス復旧のオプションを検討してください。その後、すべての依存マイクロサービスのサービス登録とヘルスを監視し、それらが適切に再接続して登録できることを確認してください。
  ```
 
-<nav aria-label="章ナビゲーション">  
+---
+
+<nav aria-label="ページナビゲーション">  
   <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
     <li style="padding: 20px; text-align: left;"><a href="chap4.md">前へ</a></li>  
-    <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>
-    <li style="padding: 20px; text-align: center;"><a href="chap6.md">次へ</a></li>  
+    <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>  
+    <li style="padding: 20px; text-align: right;"><a href="chap6.md">次へ</a></li>  
   </ul>  
 </nav>  
