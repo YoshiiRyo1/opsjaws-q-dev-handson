@@ -105,13 +105,6 @@ $env:Path = "C:\Users\<UserName>\.local\bin;$env:Path"
 uv --version
 ```
 
-<nav aria-label="ページナビゲーション">  
-  <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
-    <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>  
-    <li style="padding: 20px; text-align: right;"><a href="chap2.md">次へ</a></li>  
-  </ul>  
-</nav>  
-
 ## Application Signals 有効化
 
 [CloudWatch](https://ap-northeast-1.console.aws.amazon.com/cloudwatch/home?region=ap-northeast-1#application-signals:services) 画面から、左ペインの **Application Signals** → **サービス** を選択します。  
@@ -131,3 +124,11 @@ uv --version
 次の画面で **ECS** にチェックを入れ、**完了** ボタンをクリックします。  
 
 ![alt text](./img/chap1_as_ecs.png)
+
+----
+<nav aria-label="ページナビゲーション">  
+  <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
+    <li style="padding: 20px; text-align: center;"><a href="README.md">目次に戻る</a></li>  
+    <li style="padding: 20px; text-align: right;"><a href="chap2.md">次へ</a></li>  
+  </ul>  
+</nav>  

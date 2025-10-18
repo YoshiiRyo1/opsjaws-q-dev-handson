@@ -217,6 +217,8 @@ Q Developer CLI にははっきりと明確な指示を出したいのでリソ�
 Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
 ```
 
+---
+
 <nav aria-label="ページナビゲーション">  
   <ul style="display: flex; justify-content: space-between; list-style: none; padding: 0;">  
     <li style="padding: 20px; text-align: left;"><a href="chap2.md">前へ</a></li>  

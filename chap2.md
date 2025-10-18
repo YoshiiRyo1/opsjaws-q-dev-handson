@@ -155,7 +155,6 @@ CDK で作成リソースの一覧を `resources.md` に出力します。
 
 ```bash
 cat << EOF > ./resources.md
-
 # Resources
 
 Here is a list of AWS resources we manage. Amazon Q can answer questions about these resources and assist with troubleshooting issues.  
