@@ -106,32 +106,32 @@ Done!
 
 失敗した方はマネジメントコンソールから `CodeBuild` → `ビルド履歴` を開きログを確認してください。  
 
-CodeBuild が成功してもリポジトリにイメージが存在しない場合があります。以下のコマンドでリポジトリのイメージを確認してください。  
+CodeBuild が成功してもリポジトリにイメージが存在しない場合があります。以下のコマンドでリポジトリのイメージを確認してください。イメージが存在しない場合は build に失敗している可能性があります。ライブラリの取得等でエラーになっている場合があるので再度上記の build コマンドを実行してください。
 
 ```bash
-REPOS="
-nodejs-petclinic-nutrition-service
-otel-collector
-python-petclinic-billing-service
-python-petclinic-insurance-service
-springcommunity/spring-petclinic-admin-server
-springcommunity/spring-petclinic-api-gateway
-springcommunity/spring-petclinic-config-server
-springcommunity/spring-petclinic-customers-service
-springcommunity/spring-petclinic-discovery-server
-springcommunity/spring-petclinic-vets-service
-springcommunity/spring-petclinic-visits-service
-traffic-generator
-"
-
-for REPO in $REPOS; do
-	IMAGE_COUNT=$(aws ecr list-images --repository-name $REPO --query 'length(imageIds)' --output text)
-	if [ "$IMAGE_COUNT" -gt 0 ]; then
-		echo "$REPO にはリポジトリにイメージが存在します"
-	else
-		echo "リポジトリにイメージが存在しません"
-	fi
-done
+  REPOS=(
+      "nodejs-petclinic-nutrition-service"
+      "otel-collector"
+      "python-petclinic-billing-service"
+      "python-petclinic-insurance-service"
+      "springcommunity/spring-petclinic-admin-server"
+      "springcommunity/spring-petclinic-api-gateway"
+      "springcommunity/spring-petclinic-config-server"
+      "springcommunity/spring-petclinic-customers-service"
+      "springcommunity/spring-petclinic-discovery-server"
+      "springcommunity/spring-petclinic-vets-service"
+      "springcommunity/spring-petclinic-visits-service"
+      "traffic-generator"
+  )
+  for REPO in "${REPOS[@]}"; do
+      IMAGE_COUNT=$(aws ecr list-images --repository-name "$REPO" --query 'length(imageIds)' --output text)
+      if [ "$IMAGE_COUNT" -gt 0 ]; then
+          echo "$REPO にはリポジトリにイメージが存在します"
+      else
+          echo "$REPO にはリポジトリにイメージが存在しません"
+          break
+      fi
+  done
 ```
 
 ## ECS サンプルアプリケーション デプロイ
