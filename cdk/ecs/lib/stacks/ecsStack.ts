@@ -15,6 +15,7 @@ import {
     Protocol,
     Secret as EcsSecret,
     TaskDefinition,
+    CfnCluster,
 } from 'aws-cdk-lib/aws-ecs';
 import { SecurityGroup, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 
@@ -103,10 +104,23 @@ export class EcsClusterStack extends Stack {
             cfnStack.cfnOptions.disableRollback = true;
         }
 
+        // Enable CloudWatch Container Insights with enhanced observability.
+        // CDK high-level flag containerInsights: true sets value=enabled.
+        // Enhanced mode requires explicit clusterSettings value=enhanced, equivalent to:
+        // aws ecs update-cluster-settings --cluster <name> --settings name=containerInsights,value=enhanced
         this.cluster = new Cluster(this, 'EcsCluster', {
             vpc: props.vpc,
             clusterName: this.CLUSTER_NAME,
+            // omit containerInsights here; we'll override via CfnCluster below
         });
+
+        const cfnCluster = this.cluster.node.defaultChild as CfnCluster;
+        cfnCluster.clusterSettings = [
+            {
+                name: 'containerInsights',
+                value: 'enhanced',
+            },
+        ];
 
         this.ecrImagePrefix = `${this.account}.dkr.ecr.${this.region}.amazonaws.com`; // retrive ECR image from the private repository
         this.adotJavaImageTag = props.adotJavaImageTag;
